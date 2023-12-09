@@ -24,7 +24,7 @@ export default function Modal({ modalStatus, setModalStatus }) {
                   <div className="mt-3">
                     <p className="text-sm text-gray-500">
                       Are you sure you want to delete this comment? This will
-                      remove the comment and can't be undone.
+                      remove the comment and cannot be undone.
                     </p>
                   </div>
                 </div>

@@ -271,7 +271,10 @@ export default function Comment({
                     </div>
                   </div>
                 ) : (
-                  <div className="flex group items-center cursor-pointer">
+                  <div
+                    className="flex group items-center cursor-pointer"
+                    onClick={() => setReplyRecord(comment)}
+                  >
                     <div className="mr-2">
                       <svg
                         width="14"

@@ -6,6 +6,8 @@ export default function ReplyComment({
   setCommentsData,
   handleNotifyStatus,
   content,
+  replyRecord,
+  setReplyRecord,
 }) {
   const findMaxId = (data) => {
     let maxId = 0;
@@ -32,11 +34,32 @@ export default function ReplyComment({
         createdAt: "Today",
         score: 0,
         user: currentUser,
-        replies: [],
       };
-      setCommentsData((allComments) => [...allComments, commentRecord]);
+
+      // Update existing comments and add the new comment
+      let updatedComments = commentsData.map((existingComment) => {
+        if (replyRecord && existingComment.id === replyRecord.id) {
+          // If replyRecord is a child, push the comment to its replies
+          return {
+            ...existingComment,
+            replies: [...(existingComment.replies || []), commentRecord],
+          };
+        } else {
+          return existingComment;
+        }
+      });
+
+      // If replyRecord is not set then push the comment to the root array
+      if (!replyRecord) {
+        updatedComments.push(commentRecord);
+        var message = `A new comment has been successfully added!`;
+      } else {
+        var message = `A new comment reply has been successfully added!`;
+        setReplyRecord({});
+      }
+
+      setCommentsData(updatedComments);
       e.target.comment.value = "";
-      let message = `A new comment has been successfully added!`;
       handleNotifyStatus(message);
     } else {
       let message = `The comment cannot be added with empty field!`;

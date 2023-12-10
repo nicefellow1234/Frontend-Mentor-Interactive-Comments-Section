@@ -1,6 +1,6 @@
 "use client";
 
-import ReplyComment from "./reply-comment";
+import ReplyComment from "@/app/reply-comment";
 
 export default function Comment({
   comment,
@@ -15,6 +15,8 @@ export default function Comment({
   handleNotifyStatus,
   replyRecord,
   setReplyRecord,
+  parentComment,
+  type,
 }) {
   const handleCommentEdit = (e) => {
     e.preventDefault();
@@ -24,7 +26,6 @@ export default function Comment({
         if (c.id === editRecord.id) {
           c.content = comment;
         } else if (c.replies) {
-          // Update the reply's score if it matches the commentId
           c.replies = c.replies.map((reply) => {
             if (reply.id === editRecord.id) {
               reply.content = comment;
@@ -144,7 +145,13 @@ export default function Comment({
                 ) : (
                   <div
                     className="flex group items-center cursor-pointer"
-                    onClick={() => setReplyRecord(comment)}
+                    onClick={() =>
+                      setReplyRecord(
+                        parentComment && parentComment.id
+                          ? { ...parentComment, type, childId: comment.id }
+                          : { ...comment, type }
+                      )
+                    }
                   >
                     <div className="mr-2">
                       <svg
@@ -273,7 +280,13 @@ export default function Comment({
                 ) : (
                   <div
                     className="flex group items-center cursor-pointer"
-                    onClick={() => setReplyRecord(comment)}
+                    onClick={() =>
+                      setReplyRecord(
+                        parentComment && parentComment.id
+                          ? { ...parentComment, type, childId: comment.id }
+                          : { ...comment, type }
+                      )
+                    }
                   >
                     <div className="mr-2">
                       <svg
@@ -298,12 +311,51 @@ export default function Comment({
           </div>
         </div>
       </div>
-      {replyRecord && replyRecord.id == comment.id ? (
-        <ReplyComment
-          currentUser={currentUser}
-          content={comment.user.username}
-        />
-      ) : null}
+      {(() => {
+        if (
+          parentComment &&
+          replyRecord &&
+          replyRecord.id === parentComment.id &&
+          replyRecord.type == "child" &&
+          replyRecord.childId == comment.id
+        ) {
+          return (
+            <ReplyComment
+              currentUser={currentUser}
+              content={
+                parentComment
+                  ? parentComment.user.username
+                  : comment.user.username
+              }
+              commentsData={commentsData}
+              setCommentsData={setCommentsData}
+              replyRecord={replyRecord}
+              setReplyRecord={setReplyRecord}
+              handleNotifyStatus={handleNotifyStatus}
+            />
+          );
+        } else if (
+          replyRecord &&
+          replyRecord.id === comment.id &&
+          replyRecord.type == "parent"
+        ) {
+          return (
+            <ReplyComment
+              currentUser={currentUser}
+              content={
+                parentComment
+                  ? parentComment.user.username
+                  : comment.user.username
+              }
+              commentsData={commentsData}
+              setCommentsData={setCommentsData}
+              replyRecord={replyRecord}
+              setReplyRecord={setReplyRecord}
+              handleNotifyStatus={handleNotifyStatus}
+            />
+          );
+        }
+      })()}
     </>
   );
 }

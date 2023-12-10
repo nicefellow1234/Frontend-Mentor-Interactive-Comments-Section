@@ -6,13 +6,15 @@ import Modal from "@/app/modal";
 import Notify from "@/app/notify";
 
 export default function CommentsSection({ currentUser, comments }) {
+  const [commentsData, setCommentsData] = useState(comments);
   const [modalStatus, setModalStatus] = useState(false);
   const [notifyStatus, setNotifyStatus] = useState({
     status: false,
     message: null,
   });
   const [deleteRecord, setDeleteRecord] = useState({});
-  const [commentData, setCommentsData] = useState(comments);
+  const [editRecord, setEditRecord] = useState({});
+  const [replyRecord, setReplyRecord] = useState({});
 
   const handleNotifyStatus = (message) => {
     setNotifyStatus({
@@ -29,7 +31,7 @@ export default function CommentsSection({ currentUser, comments }) {
   };
 
   const handleVoting = (type, commentId) => {
-    let updatedComments = commentData.map((c) => {
+    let updatedComments = commentsData.map((c) => {
       if (c.id === commentId) {
         // Adjust the comment's score based on the vote type
         if (type === "up") {
@@ -62,7 +64,7 @@ export default function CommentsSection({ currentUser, comments }) {
   };
 
   const handleDeleteRecord = () => {
-    let updatedComments = commentData.filter((c) => {
+    let updatedComments = commentsData.filter((c) => {
       if (c.id === deleteRecord.id) {
         return false; // exclude the comment
       }
@@ -89,7 +91,7 @@ export default function CommentsSection({ currentUser, comments }) {
       <main>
         <div className="container max-w-2xl mx-auto mt-16">
           <div className="px-3 md:px-0">
-            {commentData.map((comment) => (
+            {commentsData.map((comment) => (
               <Fragment key={comment.id}>
                 <Comment
                   comment={comment}
@@ -97,6 +99,13 @@ export default function CommentsSection({ currentUser, comments }) {
                   setModalStatus={setModalStatus}
                   setDeleteRecord={setDeleteRecord}
                   handleVoting={handleVoting}
+                  commentsData={commentsData}
+                  setCommentsData={setCommentsData}
+                  editRecord={editRecord}
+                  setEditRecord={setEditRecord}
+                  handleNotifyStatus={handleNotifyStatus}
+                  replyRecord={replyRecord}
+                  setReplyRecord={setReplyRecord}
                 />
                 {comment.replies ? (
                   <div className="md:ml-10 md:pl-10 pl-5 border-l-[2px] border-[#e4dddd]">
@@ -108,6 +117,13 @@ export default function CommentsSection({ currentUser, comments }) {
                           setModalStatus={setModalStatus}
                           setDeleteRecord={setDeleteRecord}
                           handleVoting={handleVoting}
+                          commentsData={commentsData}
+                          setCommentsData={setCommentsData}
+                          editRecord={editRecord}
+                          setEditRecord={setEditRecord}
+                          handleNotifyStatus={handleNotifyStatus}
+                          replyRecord={replyRecord}
+                          setReplyRecord={setReplyRecord}
                         />
                       </Fragment>
                     ))}
@@ -115,7 +131,11 @@ export default function CommentsSection({ currentUser, comments }) {
                 ) : null}
               </Fragment>
             ))}
-            <ReplyComment currentUser={currentUser} />
+            <ReplyComment
+              currentUser={currentUser}
+              commentsData={commentsData}
+              setCommentsData={setCommentsData}
+            />
           </div>
         </div>
       </main>

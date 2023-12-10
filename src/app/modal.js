@@ -1,6 +1,11 @@
 "use client";
 
-export default function Modal({ modalStatus, setModalStatus }) {
+export default function Modal({
+  modalStatus,
+  setModalStatus,
+  handleDeleteRecord,
+  setDeleteRecord,
+}) {
   return (
     <div
       className={`relative z-10 ${modalStatus ? null : `hidden`}`}
@@ -33,15 +38,21 @@ export default function Modal({ modalStatus, setModalStatus }) {
             <div className="flex p-4 mb-2 w-full">
               <button
                 type="button"
-                onClick={() => setModalStatus(false)}
-                className="w-full rounded-md bg-[#68717e] text-white mr-2 py-[10px] font-medium text-[13px]"
+                onClick={() => {
+                  setModalStatus(false);
+                  setDeleteRecord({});
+                }}
+                className="w-full rounded-md bg-[#68717e] hover:bg-[#363645] text-white mr-2 py-[10px] font-medium text-[13px]"
               >
                 NO, CANCEL
               </button>
               <button
                 type="button"
-                onClick={() => setModalStatus(false)}
-                className="w-full rounded-md bg-[#ee6368] text-white py-[10px] font-medium text-[13px]"
+                onClick={() => {
+                  setModalStatus(false);
+                  handleDeleteRecord();
+                }}
+                className="w-full rounded-md bg-[#ee6368] hover:bg-[#d3060d] text-white py-[10px] font-medium text-[13px]"
               >
                 YES, DELETE
               </button>

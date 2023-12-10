@@ -1,18 +1,34 @@
 "use client";
 
-export default function Comment({ comment, currentUser, setModalStatus }) {
+export default function Comment({
+  comment,
+  currentUser,
+  setModalStatus,
+  setDeleteRecord,
+  handleVoting,
+}) {
   return (
     <div className="p-5 bg-white rounded-md shadow-lg shadow-[#f4f4f4] mb-5">
       <div className="flex">
         <div className="mr-4">
           <div className="rounded-lg leading-[0] text-center bg-[#f5f6fa] p-2 px-[10px] flex flex-col">
-            <div className="mb-7 pt-1 font-semibold text-[var(--light-grayish-blue-color)] hover:text-[var(--moderate-blue-color)] cursor-pointer">
+            <div
+              className="mb-7 pt-1 font-semibold text-[var(--light-grayish-blue-color)] hover:text-[var(--moderate-blue-color)] cursor-pointer"
+              onClick={() => {
+                handleVoting("up", comment.id);
+              }}
+            >
               +
             </div>
             <div className="font-semibold text-[12px] text-[var(--moderate-blue-color)] mb-6">
               {comment.score}
             </div>
-            <div className="text-[18px] text-center pb-1 pt-1 font-medium scale-x-[1.3] text-[var(--light-grayish-blue-color)] hover:text-[var(--moderate-blue-color)] cursor-pointer">
+            <div
+              className="text-[18px] text-center pb-1 pt-1 font-medium scale-x-[1.3] text-[var(--light-grayish-blue-color)] hover:text-[var(--moderate-blue-color)] cursor-pointer"
+              onClick={() => {
+                handleVoting("down", comment.id);
+              }}
+            >
               -
             </div>
           </div>
@@ -40,7 +56,10 @@ export default function Comment({ comment, currentUser, setModalStatus }) {
                 <div className="flex items-center hover-pale-red-color">
                   <div
                     className="flex group items-center mr-3 cursor-pointer"
-                    onClick={() => setModalStatus(true)}
+                    onClick={() => {
+                      setModalStatus(true);
+                      setDeleteRecord(comment);
+                    }}
                   >
                     <div className="mr-2">
                       <svg

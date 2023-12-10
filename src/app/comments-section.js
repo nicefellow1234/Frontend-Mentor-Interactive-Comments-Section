@@ -3,21 +3,100 @@ import { Fragment, useState } from "react";
 import Comment from "@/app/comment";
 import ReplyComment from "@/app/reply-comment";
 import Modal from "@/app/modal";
+import Notify from "@/app/notify";
 
 export default function CommentsSection({ currentUser, comments }) {
   const [modalStatus, setModalStatus] = useState(false);
+  const [notifyStatus, setNotifyStatus] = useState({
+    status: false,
+    message: null,
+  });
+  const [deleteRecord, setDeleteRecord] = useState({});
+  const [commentData, setCommentsData] = useState(comments);
+
+  const handleNotifyStatus = (message) => {
+    setNotifyStatus({
+      status: true,
+      message,
+    });
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    delay(5000).then(() =>
+      setNotifyStatus({
+        status: false,
+        message: null,
+      })
+    );
+  };
+
+  const handleVoting = (type, commentId) => {
+    let updatedComments = commentData.map((c) => {
+      if (c.id === commentId) {
+        // Adjust the comment's score based on the vote type
+        if (type === "up") {
+          c.score = (c.score || 0) + 1; // Upvote
+        } else if (type === "down") {
+          c.score = (c.score || 0) - 1; // Downvote
+        }
+      } else if (c.replies) {
+        // Update the reply's score if it matches the commentId
+        c.replies = c.replies.map((reply) => {
+          if (reply.id === commentId) {
+            // Adjust the reply's score based on the vote type
+            if (type === "up") {
+              reply.score = (reply.score || 0) + 1; // Upvote
+            } else if (type === "down") {
+              reply.score = (reply.score || 0) - 1; // Downvote
+            }
+          }
+          return reply;
+        });
+      }
+      return c;
+    });
+
+    setCommentsData(updatedComments);
+    let message = `The ${
+      type === "up" ? "upvote" : "downvote"
+    } has been successfully applied!`;
+    handleNotifyStatus(message);
+  };
+
+  const handleDeleteRecord = () => {
+    let updatedComments = commentData.filter((c) => {
+      if (c.id === deleteRecord.id) {
+        return false; // exclude the comment
+      }
+      if (c.replies) {
+        // Remove the reply if it matches the deleteRecord.id
+        c.replies = c.replies.filter((reply) => reply.id !== deleteRecord.id);
+      }
+      return true; // include other comments
+    });
+    setCommentsData(updatedComments);
+    let message = "The comment has been successfully deleted!";
+    handleNotifyStatus(message);
+  };
+
   return (
     <>
-      <Modal modalStatus={modalStatus} setModalStatus={setModalStatus} />
+      <Notify notifyStatus={notifyStatus} />
+      <Modal
+        modalStatus={modalStatus}
+        setModalStatus={setModalStatus}
+        handleDeleteRecord={handleDeleteRecord}
+        setDeleteRecord={setDeleteRecord}
+      />
       <main>
         <div className="container max-w-2xl mx-auto mt-16">
           <div>
-            {comments.map((comment) => (
+            {commentData.map((comment) => (
               <Fragment key={comment.id}>
                 <Comment
                   comment={comment}
                   currentUser={currentUser}
                   setModalStatus={setModalStatus}
+                  setDeleteRecord={setDeleteRecord}
+                  handleVoting={handleVoting}
                 />
                 {comment.replies ? (
                   <div className="ml-10 pl-10 border-l-[2px] border-[#e4dddd]">
@@ -27,6 +106,8 @@ export default function CommentsSection({ currentUser, comments }) {
                           comment={reply}
                           currentUser={currentUser}
                           setModalStatus={setModalStatus}
+                          setDeleteRecord={setDeleteRecord}
+                          handleVoting={handleVoting}
                         />
                       </Fragment>
                     ))}

@@ -23,19 +23,24 @@ export default function ReplyComment({
   const handleCommentAdd = (e) => {
     e.preventDefault();
     let comment = e.target.comment.value;
-    let id = findMaxId(commentsData);
-    let commentRecord = {
-      id,
-      content: comment,
-      createdAt: "Today",
-      score: 0,
-      user: currentUser,
-      replies: [],
-    };
-    setCommentsData((allComments) => [...allComments, commentRecord]);
-    e.target.comment.value = "";
-    let message = `A new comment has been successfully added!`;
-    handleNotifyStatus(message);
+    if (comment.trim().length) {
+      let id = findMaxId(commentsData);
+      let commentRecord = {
+        id,
+        content: comment,
+        createdAt: "Today",
+        score: 0,
+        user: currentUser,
+        replies: [],
+      };
+      setCommentsData((allComments) => [...allComments, commentRecord]);
+      e.target.comment.value = "";
+      let message = `A new comment has been successfully added!`;
+      handleNotifyStatus(message);
+    } else {
+      let message = `The comment cannot be added with empty field!`;
+      handleNotifyStatus(message);
+    }
   };
 
   return (

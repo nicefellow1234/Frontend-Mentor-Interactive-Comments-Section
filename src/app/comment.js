@@ -19,24 +19,29 @@ export default function Comment({
   const handleCommentEdit = (e) => {
     e.preventDefault();
     let comment = e.target.comment.value;
-    let updatedComments = commentsData.map((c) => {
-      if (c.id === editRecord.id) {
-        c.content = comment;
-      } else if (c.replies) {
-        // Update the reply's score if it matches the commentId
-        c.replies = c.replies.map((reply) => {
-          if (reply.id === editRecord.id) {
-            reply.content = comment;
-          }
-          return reply;
-        });
-      }
-      return c;
-    });
-    setCommentsData(updatedComments);
-    let message = `The comment has been successfully updated!`;
-    handleNotifyStatus(message);
-    setEditRecord({});
+    if (comment.trim().length) {
+      let updatedComments = commentsData.map((c) => {
+        if (c.id === editRecord.id) {
+          c.content = comment;
+        } else if (c.replies) {
+          // Update the reply's score if it matches the commentId
+          c.replies = c.replies.map((reply) => {
+            if (reply.id === editRecord.id) {
+              reply.content = comment;
+            }
+            return reply;
+          });
+        }
+        return c;
+      });
+      setCommentsData(updatedComments);
+      let message = `The comment has been successfully updated!`;
+      handleNotifyStatus(message);
+      setEditRecord({});
+    } else {
+      let message = `The comment cannot be updated with empty field!`;
+      handleNotifyStatus(message);
+    }
   };
   return (
     <>

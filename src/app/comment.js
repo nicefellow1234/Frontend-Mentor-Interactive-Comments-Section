@@ -299,7 +299,10 @@ export default function Comment({
         </div>
       </div>
       {replyRecord && replyRecord.id == comment.id ? (
-        <ReplyComment currentUser={currentUser} />
+        <ReplyComment
+          currentUser={currentUser}
+          content={comment.user.username}
+        />
       ) : null}
     </>
   );

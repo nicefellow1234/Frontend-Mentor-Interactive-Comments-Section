@@ -5,6 +5,7 @@ export default function ReplyComment({
   commentsData,
   setCommentsData,
   handleNotifyStatus,
+  content,
 }) {
   const findMaxId = (data) => {
     let maxId = 0;
@@ -60,7 +61,9 @@ export default function ReplyComment({
               name="comment"
               placeholder="Add a comment..."
               className="w-full p-3 py-2 rounded-lg border-[1.5px] text-[14px] border-[#e4dddd]"
-            ></textarea>
+            >
+              {content ? `@${content} ` : null}
+            </textarea>
           </div>
           <div>
             <button

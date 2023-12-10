@@ -51,7 +51,7 @@ export default function Comment({
                 {comment.createdAt}
               </div>
             </div>
-            <div className="w-[50%] flex justify-end items-end hidden md:block">
+            <div className="w-[50%] md:flex justify-end items-end hidden">
               {comment.user.username == currentUser.username ? (
                 <div className="flex items-center hover-pale-red-color">
                   <div

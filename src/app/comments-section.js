@@ -107,15 +107,18 @@ export default function CommentsSection({ currentUser, comments }) {
 
   return (
     <>
-      <Notify notifyStatus={notifyStatus} />
-      <Modal
-        modalStatus={modalStatus}
-        setModalStatus={setModalStatus}
-        handleDeleteRecord={handleDeleteRecord}
-        setDeleteRecord={setDeleteRecord}
-      />
       <main>
-        <div className="container max-w-2xl mx-auto mt-10">
+        <Notify notifyStatus={notifyStatus} />
+        <Modal
+          modalStatus={modalStatus}
+          setModalStatus={setModalStatus}
+          handleDeleteRecord={handleDeleteRecord}
+          setDeleteRecord={setDeleteRecord}
+        />
+        <div className="container max-w-2xl mx-auto mt-4">
+          <h1 className="text-[30px] mb-6 text-center">
+            Interactive Comments Section
+          </h1>
           <div className="flex justify-center mb-5">
             <div className="flex items-center mx-auto">
               <div className="text-[25px] mr-5">Reset Data</div>

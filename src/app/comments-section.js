@@ -88,7 +88,7 @@ export default function CommentsSection({ currentUser, comments }) {
       />
       <main>
         <div className="container max-w-2xl mx-auto mt-16">
-          <div>
+          <div className="px-3 md:px-0">
             {commentData.map((comment) => (
               <Fragment key={comment.id}>
                 <Comment
@@ -99,7 +99,7 @@ export default function CommentsSection({ currentUser, comments }) {
                   handleVoting={handleVoting}
                 />
                 {comment.replies ? (
-                  <div className="ml-10 pl-10 border-l-[2px] border-[#e4dddd]">
+                  <div className="md:ml-10 md:pl-10 pl-5 border-l-[2px] border-[#e4dddd]">
                     {comment.replies.map((reply) => (
                       <Fragment key={reply.id}>
                         <Comment
@@ -115,8 +115,8 @@ export default function CommentsSection({ currentUser, comments }) {
                 ) : null}
               </Fragment>
             ))}
+            <ReplyComment currentUser={currentUser} />
           </div>
-          <ReplyComment currentUser={currentUser} />
         </div>
       </main>
       <footer>

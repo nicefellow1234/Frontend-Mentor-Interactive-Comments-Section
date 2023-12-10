@@ -135,6 +135,7 @@ export default function CommentsSection({ currentUser, comments }) {
               currentUser={currentUser}
               commentsData={commentsData}
               setCommentsData={setCommentsData}
+              handleNotifyStatus={handleNotifyStatus}
             />
           </div>
         </div>

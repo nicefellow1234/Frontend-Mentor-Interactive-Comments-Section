@@ -4,6 +4,7 @@ export default function ReplyComment({
   currentUser,
   commentsData,
   setCommentsData,
+  handleNotifyStatus,
 }) {
   const findMaxId = (data) => {
     let maxId = 0;
@@ -33,6 +34,8 @@ export default function ReplyComment({
     };
     setCommentsData((allComments) => [...allComments, commentRecord]);
     e.target.comment.value = "";
+    let message = `A new comment has been successfully added!`;
+    handleNotifyStatus(message);
   };
 
   return (
